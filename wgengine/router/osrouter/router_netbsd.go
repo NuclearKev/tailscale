@@ -71,11 +71,13 @@ func (r *netbsdRouter) Up() error {
 	}
 	// set socket buffer sizes to 14MB
 	// at least need socket buffer sizes >= 7MB to avoid drops under load
-	buffersizeString := make([]string, 4)
+	buffersizeString := make([]string, 6)
 	buffersizeString[0] = "net.inet.udp.recvspace=1048576"
 	buffersizeString[1] = "net.inet.udp.sendspace=1048576"
 	buffersizeString[2] = "net.inet.tcp.recvspace=1048576"
 	buffersizeString[3] = "net.inet.tcp.sendspace=1048576"
+	buffersizeString[4] = "net.inet.ip.forwarding = 1"
+	buffersizeString[5] = "kern.ipc.maxsockbuf=16777216"
 
 	for i := 0; i < len(buffersizeString); i++ {
 		cmd := exec.Command("sudo", "sysctl", "-w", buffersizeString[i])
