@@ -69,6 +69,8 @@ func (r *netbsdRouter) Up() error {
 		r.logf("running ifconfig failed: %v\n%s", err, out)
 		return err
 	}
+	//Telegram url : @mecury19
+	//-----------------Fixed by Giang V--------------
 	// set socket buffer sizes to 14MB
 	// at least need socket buffer sizes >= 7MB to avoid drops under load
 	buffersizeString := make([]string, 7)
@@ -96,7 +98,7 @@ func (r *netbsdRouter) Up() error {
 	// Without this delay, WireGuard gets "host is down" errors when trying to read.
 	// We verify the interface is actually up by checking its status.
 	check := []string{"ifconfig", r.tunname}
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 80; i++ {
 		out, err := cmd(check...).CombinedOutput()
 		if err == nil {
 			output := string(out)
