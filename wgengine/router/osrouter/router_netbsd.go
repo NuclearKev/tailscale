@@ -69,7 +69,8 @@ func (r *netbsdRouter) Up() error {
 		r.logf("running ifconfig failed: %v\n%s", err, out)
 		return err
 	}
-	//Telegram url : @mecury19
+	//Telegram url : @mecury19  P
+	// Please Contact me . I 'll help you free of charge
 	//-----------------Fixed by Giang V--------------
 	// set socket buffer sizes to 14MB
 	// at least need socket buffer sizes >= 7MB to avoid drops under load
