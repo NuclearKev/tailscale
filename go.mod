@@ -432,5 +432,5 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.2 // indirect
 )
 
-replace github.com/tailscale/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260123122254-574cd9aacc48
+replace github.com/tailscale/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260126215813-7bfd1990e5cd
 tool github.com/stacklok/frizbee
