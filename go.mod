@@ -36,7 +36,7 @@ require (
 	github.com/frankban/quicktest v1.14.6
 	github.com/fxamacker/cbor/v2 v2.7.0
 	github.com/gaissmai/bart v0.18.0
-	github.com/giangv11/wireguard-go v0.0.0-20260126215813-7bfd1990e5cd
+	github.com/giangv11/wireguard-go v0.0.0-20260127205428-d1cf903dd3c4
 	github.com/go-json-experiment/json v0.0.0-20250813024750-ebf49471dced
 	github.com/go-logr/zapr v1.3.0
 	github.com/go-ole/go-ole v1.3.0
@@ -433,6 +433,6 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.2 // indirect
 )
 
-replace github.com/giangv11/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260126215813-7bfd1990e5cd
+replace github.com/giangv11/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260127205428-d1cf903dd3c4
 
 tool github.com/stacklok/frizbee
