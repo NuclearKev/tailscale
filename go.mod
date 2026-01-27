@@ -433,4 +433,5 @@ require (
 )
 
 replace github.com/tailscale/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260126215813-7bfd1990e5cd
+
 tool github.com/stacklok/frizbee
