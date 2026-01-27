@@ -24,8 +24,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/giangv11/wireguard-go/device"
 	"github.com/giangv11/wireguard-go/conn"
+	"github.com/giangv11/wireguard-go/device"
 	"go4.org/mem"
 	"golang.org/x/net/ipv6"
 	"tailscale.com/control/controlknobs"

@@ -11,16 +11,16 @@ import (
 	"fmt"
 	"net/netip"
 	"reflect"
-	"strconv"s
+	"strconv"
 	"strings"
 	"testing"
 	"time"
 	"unicode"
 	"unsafe"
 
+	"github.com/giangv11/wireguard-go/tun/tuntest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/giangv11/wireguard-go/tun/tuntest"
 	"go4.org/mem"
 	"go4.org/netipx"
 	"gvisor.dev/gvisor/pkg/buffer"
