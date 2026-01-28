@@ -3,6 +3,18 @@
 
 //go:build linux
 
+//--------------------------------This issues have to solve-----------------
+// 1️⃣ Temporary boot test
+// At the bootloader:
+// boot -d
+// boot netbsd -o ip.maxsockbuf=16777216
+// If that fixes everything → kernel limit confirmed.
+// 2️⃣ Permanent fix (advanced)
+// Rebuild kernel with:
+// options MAXSOCKBUF=16777216
+// Then reinstall kernel and reboot.
+// This is outside Tailscale’s control.
+
 package prober
 
 import (

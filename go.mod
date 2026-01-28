@@ -36,6 +36,7 @@ require (
 	github.com/frankban/quicktest v1.14.6
 	github.com/fxamacker/cbor/v2 v2.7.0
 	github.com/gaissmai/bart v0.18.0
+	github.com/tailscale/wireguard-go v0.0.0-20260127214208-0de654db5f0b
 	github.com/go-json-experiment/json v0.0.0-20250813024750-ebf49471dced
 	github.com/go-logr/zapr v1.3.0
 	github.com/go-ole/go-ole v1.3.0
@@ -93,7 +94,7 @@ require (
 	github.com/tailscale/setec v0.0.0-20250205144240-8898a29c3fbb
 	github.com/tailscale/web-client-prebuilt v0.0.0-20250124233751-d4cd19a26976
 	github.com/tailscale/wf v0.0.0-20240214030419-6fbb0a674ee6
-	github.com/tailscale/wireguard-go v0.0.0-20250716170648-1d0488a3d7da
+	github.com/tailscale/wireguard-go v0.0.0-20240731203015-71393c576b98
 	github.com/tailscale/xnet v0.0.0-20240729143630-8497ac4dab2e
 	github.com/tc-hib/winres v0.2.1
 	github.com/tcnksm/go-httpstat v0.2.0
@@ -340,23 +341,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/moricho/tparallel v0.3.1 // indirect
-	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/nakabonne/nestif v0.3.1 // indirect
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
-	github.com/nishanths/exhaustive v0.12.0 // indirect
-	github.com/nishanths/predeclared v0.2.2 // indirect
-	github.com/nunnatsa/ginkgolinter v0.16.1 // indirect
-	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/opencontainers/go-digest v1.0.0 // indirect
-	github.com/opencontainers/image-spec v1.1.0 // indirect
-	github.com/pelletier/go-toml/v2 v2.2.0 // indirect
-	github.com/pierrec/lz4/v4 v4.1.21 // indirect
-	github.com/pjbgf/sha1cd v0.3.0 // indirect
-	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/polyfloyd/go-errorlint v1.4.8 // indirect
-	github.com/prometheus/client_model v0.6.2
+	github.com/moretheus/client_model v0.6.2
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.2 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -393,7 +378,23 @@ require (
 	github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
 	github.com/tailscale/go-winio v0.0.0-20231025203758-c4f33415bf55
 	github.com/tdakkota/asciicheck v0.2.0 // indirect
-	github.com/tetafro/godot v1.4.16 // indirect
+	github.com/tetafro/godot icho/tparallel v0.3.1 // indirect
+	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/nakabonne/nestif v0.3.1 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
+	github.com/nishanths/exhaustive v0.12.0 // indirect
+	github.com/nishanths/predeclared v0.2.2 // indirect
+	github.com/nunnatsa/ginkgolinter v0.16.1 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
+	github.com/opencontainers/image-spec v1.1.0 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.0 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
+	github.com/pjbgf/sha1cd v0.3.0 // indirect
+	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/polyfloyd/go-errorlint v1.4.8 // indirect
+	github.com/promv1.4.16 // indirect
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966 // indirect
 	github.com/timonwong/loggercheck v0.9.4 // indirect
 	github.com/tomarrell/wrapcheck/v2 v2.8.3 // indirect
@@ -432,5 +433,5 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.2 // indirect
 )
 
-replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20250725194655-a926bf931d33
+replace github.com/tailscale/wireguard-go => github.com/giangv11/wireguard-go v0.0.0-20260128073033-04c3e7a3fc9e
 tool github.com/stacklok/frizbee
