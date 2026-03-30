@@ -1,4 +1,4 @@
-// Copyright (c) Tailscale Inc & AUTHORS
+// Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
 // Package local contains a Go client for the Tailscale LocalAPI.
@@ -811,25 +811,6 @@ func (lc *Client) CheckUDPGROForwarding(ctx context.Context) error {
 	}
 	if err := json.Unmarshal(body, &jres); err != nil {
 		return fmt.Errorf("invalid JSON from check-udp-gro-forwarding: %w", err)
-	}
-	if jres.Warning != "" {
-		return errors.New(jres.Warning)
-	}
-	return nil
-}
-
-// CheckReversePathFiltering asks the local Tailscale daemon whether strict
-// reverse path filtering is enabled, which would break exit node usage on Linux.
-func (lc *Client) CheckReversePathFiltering(ctx context.Context) error {
-	body, err := lc.get200(ctx, "/localapi/v0/check-reverse-path-filtering")
-	if err != nil {
-		return err
-	}
-	var jres struct {
-		Warning string
-	}
-	if err := json.Unmarshal(body, &jres); err != nil {
-		return fmt.Errorf("invalid JSON from check-reverse-path-filtering: %w", err)
 	}
 	if jres.Warning != "" {
 		return errors.New(jres.Warning)

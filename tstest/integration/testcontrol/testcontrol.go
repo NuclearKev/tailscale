@@ -1,4 +1,4 @@
-// Copyright (c) Tailscale Inc & AUTHORS
+// Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
 // Package testcontrol contains a minimal control plane server for testing purposes.
@@ -589,8 +589,9 @@ func (s *Server) SetNodeCapMap(nodeKey key.NodePublic, capMap tailcfg.NodeCapMap
 //	]
 func (s *Server) SetGlobalAppCaps(appCaps tailcfg.PeerCapMap) {
 	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.globalAppCaps = appCaps
-	s.mu.Unlock()
+	s.updateLocked("SetGlobalAppCaps", s.nodeIDsLocked(0))
 }
 
 // AddDNSRecords adds records to the server's DNS config.
@@ -601,6 +602,7 @@ func (s *Server) AddDNSRecords(records ...tailcfg.DNSRecord) {
 		s.DNSConfig = new(tailcfg.DNSConfig)
 	}
 	s.DNSConfig.ExtraRecords = append(s.DNSConfig.ExtraRecords, records...)
+	s.updateLocked("AddDNSRecords", s.nodeIDsLocked(0))
 }
 
 // nodeIDsLocked returns the node IDs of all nodes in the server, except
@@ -1110,14 +1112,21 @@ func sendUpdate(dst chan<- updateType, updateType updateType) bool {
 	}
 }
 
-func (s *Server) UpdateNode(n *tailcfg.Node) (peersToUpdate []tailcfg.NodeID) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *Server) updateNodeLocked(n *tailcfg.Node) (peersToUpdate []tailcfg.NodeID) {
 	if n.Key.IsZero() {
 		panic("zero nodekey")
 	}
 	s.nodes[n.Key] = n.Clone()
 	return s.nodeIDsLocked(n.ID)
+}
+
+// UpdateNode updates or adds the input node, then triggers a netmap update for
+// all attached streaming clients.
+func (s *Server) UpdateNode(n *tailcfg.Node) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.updateNodeLocked(n)
+	s.updateLocked("UpdateNode", s.nodeIDsLocked(0))
 }
 
 func (s *Server) incrInServeMap(delta int) {
@@ -1178,7 +1187,9 @@ func (s *Server) serveMap(w http.ResponseWriter, r *http.Request, mkey key.Machi
 				}
 			}
 		}
-		peersToUpdate = s.UpdateNode(node)
+		s.mu.Lock()
+		peersToUpdate = s.updateNodeLocked(node)
+		s.mu.Unlock()
 	}
 
 	nodeID := node.ID
@@ -1327,16 +1338,19 @@ func (s *Server) MapResponse(req *tailcfg.MapRequest) (res *tailcfg.MapResponse,
 
 	s.mu.Lock()
 	nodeCapMap := maps.Clone(s.nodeCapMaps[nk])
+	var dns *tailcfg.DNSConfig
+	if s.DNSConfig != nil {
+		dns = s.DNSConfig.Clone()
+	}
+	magicDNSDomain := s.MagicDNSDomain
 	s.mu.Unlock()
 
 	node.CapMap = nodeCapMap
 	node.Capabilities = append(node.Capabilities, tailcfg.NodeAttrDisableUPnP)
 
 	t := time.Date(2020, 8, 3, 0, 0, 0, 1, time.UTC)
-	dns := s.DNSConfig
-	if dns != nil && s.MagicDNSDomain != "" {
-		dns = dns.Clone()
-		dns.CertDomains = append(dns.CertDomains, node.Hostinfo.Hostname()+"."+s.MagicDNSDomain)
+	if dns != nil && magicDNSDomain != "" {
+		dns.CertDomains = append(dns.CertDomains, node.Hostinfo.Hostname()+"."+magicDNSDomain)
 	}
 
 	res = &tailcfg.MapResponse{

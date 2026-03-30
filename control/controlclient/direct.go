@@ -1,4 +1,4 @@
-// Copyright (c) Tailscale Inc & AUTHORS
+// Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
 package controlclient
@@ -57,6 +57,7 @@ import (
 	"tailscale.com/util/syspolicy/pkey"
 	"tailscale.com/util/syspolicy/policyclient"
 	"tailscale.com/util/testenv"
+	"tailscale.com/util/vizerror"
 	"tailscale.com/util/zstdframe"
 )
 
@@ -741,7 +742,7 @@ func (c *Direct) doLogin(ctx context.Context, opt loginOpt) (mustRegen bool, new
 		resp.NodeKeyExpired, resp.MachineAuthorized, resp.AuthURL != "")
 
 	if resp.Error != "" {
-		return false, "", nil, UserVisibleError(resp.Error)
+		return false, "", nil, vizerror.New(resp.Error)
 	}
 	if len(resp.NodeKeySignature) > 0 {
 		return true, "", resp.NodeKeySignature, nil
@@ -1207,6 +1208,9 @@ func NetmapFromMapResponseForDebug(ctx context.Context, pr persist.PersistView, 
 	}
 	if resp.Node == nil {
 		return nil, errors.New("MapResponse lacks Node")
+	}
+	if !pr.Valid() {
+		return nil, errors.New("PersistView invalid")
 	}
 
 	nu := &rememberLastNetmapUpdater{}
