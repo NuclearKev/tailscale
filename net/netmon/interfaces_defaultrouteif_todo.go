@@ -1,7 +1,7 @@
 // Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
-//go:build !linux && !windows && !darwin && !freebsd && !android && !openbsd
+//go:build !linux && !windows && !darwin && !freebsd && !android && !openbsd && !netbsd
 
 package netmon
 

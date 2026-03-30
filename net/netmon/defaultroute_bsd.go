@@ -4,7 +4,7 @@
 // Common code for FreeBSD and OpenBSD.
 // Not used on iOS or macOS. See defaultroute_darwin.go.
 
-//go:build freebsd || openbsd
+//go:build freebsd || openbsd || netbsd
 
 package netmon
 

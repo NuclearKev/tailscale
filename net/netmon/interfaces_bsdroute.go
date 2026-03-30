@@ -3,7 +3,7 @@
 
 // FreeBSD and OpenBSD routing table functions.
 
-//go:build freebsd || openbsd
+//go:build freebsd || openbsd || netbsd
 
 package netmon
 

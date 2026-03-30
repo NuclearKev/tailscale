@@ -1,7 +1,7 @@
 // Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
-//go:build go1.19 && (linux || darwin || freebsd || openbsd) && !ts_omit_bird
+//go:build go1.19 && (linux || darwin || freebsd || openbsd || netbsd) && !ts_omit_bird
 
 package main
 

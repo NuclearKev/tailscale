@@ -4,7 +4,7 @@
 // Common code for FreeBSD and Darwin. This might also work on other
 // BSD systems (e.g. OpenBSD) but has not been tested.
 
-//go:build darwin || freebsd || openbsd
+//go:build darwin || freebsd || openbsd || netbsd
 
 package netmon
 

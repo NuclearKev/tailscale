@@ -1,7 +1,7 @@
 // Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
-//go:build (linux && !android) || (darwin && !ios) || freebsd || openbsd || plan9
+//go:build (linux && !android) || (darwin && !ios) || freebsd || openbsd || netbsd || plan9
 
 // Package tailssh is an SSH server integrated into Tailscale.
 package tailssh
@@ -73,7 +73,7 @@ const (
 // ipnLocalBackend is the subset of ipnlocal.LocalBackend that we use.
 // It is used for testing.
 type ipnLocalBackend interface {
-	GetSSH_HostKeys() ([]gossh.Signer, error)
+//	GetSSH_HostKeys() ([]gossh.Signer, error)
 	ShouldRunSSH() bool
 	NetMap() *netmap.NetworkMap
 	WhoIs(proto string, ipp netip.AddrPort) (n tailcfg.NodeView, u tailcfg.UserProfile, ok bool)
@@ -509,13 +509,13 @@ func (srv *server) newConn() (*conn, error) {
 	for k, v := range ssh.DefaultSubsystemHandlers {
 		ss.SubsystemHandlers[k] = v
 	}
-	keys, err := srv.lb.GetSSH_HostKeys()
-	if err != nil {
-		return nil, err
-	}
-	for _, signer := range keys {
-		ss.AddHostKey(signer)
-	}
+//	keys, err := srv.lb.GetSSH_HostKeys()
+//	if err != nil {
+//		return nil, err
+//	}
+//	for _, signer := range keys {
+//		ss.AddHostKey(signer)
+//	}
 	return c, nil
 }
 
