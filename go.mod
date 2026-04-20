@@ -500,5 +500,5 @@ require (
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 )
 
-replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20250725194655-a926bf931d33
+replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20260420170540-c49af4f46ced
 tool github.com/stacklok/frizbee
