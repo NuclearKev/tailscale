@@ -248,6 +248,9 @@ func (r *netbsdRouter) Close() error {
 }
 
 func cleanUp(logf logger.Logf, interfaceName string) {
+	if interfaceName == "userspace-networking" {
+		return
+	}
 	ifdown := []string{"ifconfig", interfaceName, "down"}
 	logf("cleanUp: ifdown=%s", ifdown)
 	out, err := cmd(ifdown...).CombinedOutput()
