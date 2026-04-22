@@ -122,8 +122,7 @@ func (r *netbsdRouter) Set(cfg *router.Config) error {
 			}
 
 			routedel := []string{"route", "-q", "-n",
-				"delete", "-inet", r.local4.String(),
-				"-iface", r.local4.Addr().String()}
+				"delete", "-host", r.local4.Addr().String(), "127.0.0.1"}
 			if out, err := cmd(routedel...).CombinedOutput(); err != nil {
 				r.logf("route del failed: %v: %v\n%s", routedel, err, out)
 				if errq == nil {
@@ -143,11 +142,14 @@ func (r *netbsdRouter) Set(cfg *router.Config) error {
 				}
 			}
 
-			routeadd := []string{"route", "-q", "-n",
-				"add", "-inet", localAddr4.String(),
-				"-iface", localAddr4.Addr().String()}
-			if out, err := cmd(routeadd...).CombinedOutput(); err != nil {
-				r.logf("route add failed: %v: %v\n%s", routeadd, err, out)
+			// Delete the auto-created host route (points to tun), then
+			// re-add it via loopback so pinging our own Tailscale IP
+			// delivers locally instead of going into the tunnel.
+			cmd("route", "-q", "-n", "delete", "-host", localAddr4.Addr().String()).CombinedOutput()
+			loadd := []string{"route", "-q", "-n",
+				"add", "-host", localAddr4.Addr().String(), "127.0.0.1"}
+			if out, err := cmd(loadd...).CombinedOutput(); err != nil {
+				r.logf("loopback route add failed: %v: %v\n%s", loadd, err, out)
 				if errq == nil {
 					errq = err
 				}

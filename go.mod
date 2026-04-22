@@ -502,4 +502,6 @@ require (
 
 replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20260422015308-e2e5b3ce587d
 
+replace github.com/tailscale/peercred => github.com/nuclearkev/peercred v0.0.0-20260422151436-9f6be75ca2f8
+
 tool github.com/stacklok/frizbee
