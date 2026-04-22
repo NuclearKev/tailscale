@@ -204,7 +204,7 @@ func (r *netbsdRouter) Set(cfg *router.Config) error {
 				dst = localAddr6.Addr().String()
 			}
 			routedel := []string{"route", "-q", "-n",
-				"del", "-" + inet(route), nstr,
+				"delete", "-" + inet(route), nstr,
 				"-iface", dst}
 			out, err := cmd(routedel...).CombinedOutput()
 			if err != nil {
@@ -224,6 +224,7 @@ func (r *netbsdRouter) Set(cfg *router.Config) error {
 			if route.Addr().Is6() {
 				dst = localAddr6.Addr().String()
 			}
+			cmd("route", "-q", "-n", "delete", "-"+inet(route), nstr).CombinedOutput()
 			routeadd := []string{"route", "-q", "-n",
 				"add", "-" + inet(route), nstr,
 				"-iface", dst}
