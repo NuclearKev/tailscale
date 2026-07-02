@@ -909,6 +909,8 @@ github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151 h1:L9kV9mwNAeH
 github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151/go.mod h1:f93CXfllFsO9ZQVq+Zocb1Gp4G5Fz0b0rXHLOzt/Djc=
 github.com/nuclearkev/wireguard-go v0.0.0-20260518172154-8ce295ace1d0 h1:z2L4IVCePxMyDa7MZvx8tuWrCjBDnVCo0AEQmQ3stM8=
 github.com/nuclearkev/wireguard-go v0.0.0-20260518172154-8ce295ace1d0/go.mod h1:6SerzcvHWQchKO2BfNdmquA77CHSECZuFl+D9fp4RnI=
+github.com/nuclearkev/wireguard-go v0.0.0-20260702184710-b6918577cb6a h1:KChdGNHF8lkKO2rkARjfx2dYjsNt6yCiGA/ys9ogtc8=
+github.com/nuclearkev/wireguard-go v0.0.0-20260702184710-b6918577cb6a/go.mod h1:6SerzcvHWQchKO2BfNdmquA77CHSECZuFl+D9fp4RnI=
 github.com/nunnatsa/ginkgolinter v0.16.1 h1:uDIPSxgVHZ7PgbJElRDGzymkXH+JaF7mjew+Thjnt6Q=
 github.com/nunnatsa/ginkgolinter v0.16.1/go.mod h1:4tWRinDN1FeJgU+iJANW/kz7xKN5nYRAOfJDQUS9dOQ=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=

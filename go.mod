@@ -506,7 +506,7 @@ require (
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 )
 
-replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20260518172154-8ce295ace1d0
+replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20260702184710-b6918577cb6a
 
 replace github.com/tailscale/peercred => github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151
 
