@@ -17,7 +17,9 @@ import (
 	"gvisor.dev/gvisor/pkg/tcpip"
 	"gvisor.dev/gvisor/pkg/tcpip/adapters/gonet"
 	"gvisor.dev/gvisor/pkg/tcpip/header"
+	"gvisor.dev/gvisor/pkg/tcpip/network/ipv4"
 	"gvisor.dev/gvisor/pkg/tcpip/stack"
+	"gvisor.dev/gvisor/pkg/tcpip/transport/udp"
 	"tailscale.com/envknob"
 	"tailscale.com/ipn"
 	"tailscale.com/ipn/ipnlocal"
@@ -470,7 +472,7 @@ func TestShouldProcessInbound(t *testing.T) {
 				IPServiceMap := netmap.IPServiceMappings{
 					serviceIP: "svc:test-service",
 				}
-				i.lb.SetIPServiceMappingsForTest(IPServiceMap)
+				i.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 				i.atomicIsVIPServiceIPFunc.Store(func(addr netip.Addr) bool {
 					return addr == serviceIP
@@ -517,7 +519,7 @@ func TestShouldProcessInbound(t *testing.T) {
 				IPServiceMap := netmap.IPServiceMappings{
 					serviceIP: "svc:test-service",
 				}
-				i.lb.SetIPServiceMappingsForTest(IPServiceMap)
+				i.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 				i.atomicIsVIPServiceIPFunc.Store(func(addr netip.Addr) bool {
 					return addr == serviceIP
@@ -543,7 +545,7 @@ func TestShouldProcessInbound(t *testing.T) {
 				IPServiceMap := netmap.IPServiceMappings{
 					serviceIPv6: "svc:test-service",
 				}
-				i.lb.SetIPServiceMappingsForTest(IPServiceMap)
+				i.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 				i.atomicIsVIPServiceIPFunc.Store(func(addr netip.Addr) bool {
 					return addr == serviceIPv6
@@ -587,7 +589,7 @@ func TestShouldProcessInbound(t *testing.T) {
 				IPServiceMap := netmap.IPServiceMappings{
 					serviceIPv6: "svc:test-service",
 				}
-				i.lb.SetIPServiceMappingsForTest(IPServiceMap)
+				i.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 				i.atomicIsVIPServiceIPFunc.Store(func(addr netip.Addr) bool {
 					return addr == serviceIPv6
@@ -614,7 +616,7 @@ func TestShouldProcessInbound(t *testing.T) {
 				IPServiceMap := netmap.IPServiceMappings{
 					serviceIP: "svc:test-service",
 				}
-				i.lb.SetIPServiceMappingsForTest(IPServiceMap)
+				i.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 				i.atomicIsVIPServiceIPFunc.Store(func(addr netip.Addr) bool {
 					return addr == serviceIP
@@ -737,7 +739,10 @@ func makeHangDialer(tb testing.TB) (netx.DialFunc, chan struct{}) {
 // TestTCPForwardLimits verifies that the limits on the TCP forwarder work in a
 // success case (i.e. when we don't hit the limit).
 func TestTCPForwardLimits(t *testing.T) {
+	tstest.AssertNotParallel(t) // calls envknob.Setenv
 	envknob.Setenv("TS_DEBUG_NETSTACK", "true")
+	t.Cleanup(func() { envknob.Setenv("TS_DEBUG_NETSTACK", "") })
+
 	impl := makeNetstack(t, func(impl *Impl) {
 		impl.ProcessSubnets = true
 	})
@@ -815,6 +820,7 @@ func TestTCPForwardLimits_PerClient(t *testing.T) {
 	clientmetric.ResetForTest(t)
 	tstest.AssertNotParallel(t) // calls envknob.Setenv
 	envknob.Setenv("TS_DEBUG_NETSTACK", "true")
+	t.Cleanup(func() { envknob.Setenv("TS_DEBUG_NETSTACK", "") })
 
 	// Set our test override limits during this test.
 	maxInFlightConnectionAttemptsForTest.Store(2)
@@ -950,7 +956,7 @@ func TestHandleLocalPackets(t *testing.T) {
 		netip.MustParseAddr("100.99.55.111"):        "svc:test-service",
 		netip.MustParseAddr("fd7a:115c:a1e0::abcd"): "svc:test-service",
 	}
-	impl.lb.SetIPServiceMappingsForTest(IPServiceMap)
+	impl.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 
 	t.Run("ShouldHandleServiceIP", func(t *testing.T) {
 		t.Parallel()
@@ -1092,14 +1098,14 @@ func TestHandleLocalPackets(t *testing.T) {
 	t.Run("ShouldNotHandleInactiveVIPService", func(t *testing.T) {
 		// Tests that packets to Tailscale Services we don't host are accepted.
 		inactiveVIP := netip.MustParseAddr("100.99.55.222")
-		impl.lb.SetIPServiceMappingsForTest(netmap.IPServiceMappings{
+		impl.lb.ForTest().SetIPServiceMappings(netmap.IPServiceMappings{
 			netip.MustParseAddr("100.99.55.111"):        "svc:test-service", // active (shared fixture)
 			netip.MustParseAddr("fd7a:115c:a1e0::abcd"): "svc:test-service",
 			inactiveVIP: "svc:inactive-elsewhere",
 		})
 		t.Cleanup(func() {
 			// Restore the shared fixture for any later/parallel subtests.
-			impl.lb.SetIPServiceMappingsForTest(IPServiceMap)
+			impl.lb.ForTest().SetIPServiceMappings(IPServiceMap)
 		})
 		pkt := &packet.Parsed{
 			IPVersion: 4,
@@ -1213,7 +1219,7 @@ func TestAcceptTCPLoopbackForwardVsRST(t *testing.T) {
 				}); err != nil {
 					t.Fatalf("EditPrefs: %v", err)
 				}
-				impl.lb.SetIPServiceMappingsForTest(netmap.IPServiceMappings{serviceVIP: serviceName})
+				impl.lb.ForTest().SetIPServiceMappings(netmap.IPServiceMappings{serviceVIP: serviceName})
 			},
 			dst:         netip.AddrPortFrom(serviceVIP, 8001), // 8001: a port the service doesn't serve
 			wantForward: false,
@@ -1789,6 +1795,114 @@ func udp4raw(t testing.TB, src, dst netip.Addr, sport, dport uint16, payload []b
 	)
 	u.SetChecksum(^header.UDP(buf[header.IPv4MinimumSize:]).CalculateChecksum(xsum))
 	return buf
+}
+
+func fragmentIPv4ForTest(t testing.TB, pkt []byte, firstPayloadLen uint16) (first, second []byte) {
+	t.Helper()
+	if firstPayloadLen%8 != 0 {
+		t.Fatalf("firstPayloadLen %d is not 8-byte aligned", firstPayloadLen)
+	}
+	if len(pkt) < header.IPv4MinimumSize+int(firstPayloadLen) {
+		t.Fatalf("packet length %d too short for firstPayloadLen %d", len(pkt), firstPayloadLen)
+	}
+	ip := header.IPv4(pkt)
+	if ip.HeaderLength() != header.IPv4MinimumSize {
+		t.Fatalf("test helper only supports 20-byte IPv4 headers; got %d", ip.HeaderLength())
+	}
+	ipPayloadLen := len(pkt) - header.IPv4MinimumSize
+	if int(firstPayloadLen) >= ipPayloadLen {
+		t.Fatalf("firstPayloadLen %d must be smaller than IP payload length %d", firstPayloadLen, ipPayloadLen)
+	}
+
+	first = make([]byte, header.IPv4MinimumSize+int(firstPayloadLen))
+	copy(first, pkt[:len(first)])
+	firstIP := header.IPv4(first)
+	firstIP.SetTotalLength(uint16(len(first)))
+	firstIP.SetFlagsFragmentOffset(header.IPv4FlagMoreFragments, 0)
+	firstIP.SetChecksum(0)
+	firstIP.SetChecksum(^firstIP.CalculateChecksum())
+
+	secondPayloadLen := ipPayloadLen - int(firstPayloadLen)
+	second = make([]byte, header.IPv4MinimumSize+secondPayloadLen)
+	copy(second[:header.IPv4MinimumSize], pkt[:header.IPv4MinimumSize])
+	copy(second[header.IPv4MinimumSize:], pkt[header.IPv4MinimumSize+int(firstPayloadLen):])
+	secondIP := header.IPv4(second)
+	secondIP.SetTotalLength(uint16(len(second)))
+	secondIP.SetFlagsFragmentOffset(0, firstPayloadLen)
+	secondIP.SetChecksum(0)
+	secondIP.SetChecksum(^secondIP.CalculateChecksum())
+
+	return first, second
+}
+
+// TestLinkEndpointInjectInboundIPv4Fragments verifies that Tailscale's inbound
+// link endpoint path lets IPv4 fragments reach gVisor for reassembly.
+// Previously (see https://github.com/tailscale/tailscale/issues/20320),
+// gro.RXChecksumOffload validated L4 checksums before reassembly, so the first
+// fragment was dropped and the UDP datagram never reached the socket.
+func TestLinkEndpointInjectInboundIPv4Fragments(t *testing.T) {
+	const nicID tcpip.NICID = 1
+	localIP := netip.MustParseAddr("100.64.1.2")
+	remoteIP := netip.MustParseAddr("100.64.1.3")
+	payload := []byte("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz")
+	raw := udp4raw(t, remoteIP, localIP, 12345, 8081, payload)
+	first, second := fragmentIPv4ForTest(t, raw, 80)
+
+	s := stack.New(stack.Options{
+		NetworkProtocols: []stack.NetworkProtocolFactory{
+			ipv4.NewProtocol,
+		},
+		TransportProtocols: []stack.TransportProtocolFactory{
+			udp.NewProtocol,
+		},
+	})
+	defer s.Close()
+
+	ep := newLinkEndpoint(64, 1280, "", groNotSupported)
+	if err := s.CreateNIC(nicID, ep); err != nil {
+		t.Fatalf("CreateNIC: %v", err)
+	}
+	if err := s.AddProtocolAddress(nicID, tcpip.ProtocolAddress{
+		Protocol:          header.IPv4ProtocolNumber,
+		AddressWithPrefix: tcpip.AddrFrom4(localIP.As4()).WithPrefix(),
+	}, stack.AddressProperties{}); err != nil {
+		t.Fatalf("AddProtocolAddress: %v", err)
+	}
+
+	pc, err := gonet.DialUDP(s, &tcpip.FullAddress{
+		NIC:  nicID,
+		Addr: tcpip.AddrFrom4(localIP.As4()),
+		Port: 8081,
+	}, nil, header.IPv4ProtocolNumber)
+	if err != nil {
+		t.Fatalf("DialUDP: %v", err)
+	}
+	defer pc.Close()
+
+	var parsed packet.Parsed
+	parsed.Decode(first)
+	ep.injectInbound(&parsed)
+	parsed.Decode(second)
+	ep.injectInbound(&parsed)
+
+	if err := pc.SetReadDeadline(time.Now().Add(5 * time.Second)); err != nil {
+		t.Fatalf("SetReadDeadline: %v", err)
+	}
+	buf := make([]byte, 512)
+	n, addr, err := pc.ReadFrom(buf)
+	if err != nil {
+		t.Fatalf("ReadFrom: %v (fragmented packet was not reassembled and delivered)", err)
+	}
+	if got := string(buf[:n]); got != string(payload) {
+		t.Fatalf("payload = %q, want %q", got, payload)
+	}
+	udpAddr, ok := addr.(*net.UDPAddr)
+	if !ok {
+		t.Fatalf("remote addr = %T(%v), want *net.UDPAddr", addr, addr)
+	}
+	if got := udpAddr.AddrPort(); got != netip.MustParseAddrPort("100.64.1.3:12345") {
+		t.Fatalf("remote addr = %v, want 100.64.1.3:12345", got)
+	}
 }
 
 // TestInjectLoopback verifies that the inject goroutine delivers self-addressed
