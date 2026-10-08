@@ -555,7 +555,7 @@ require (
 	sigs.k8s.io/structured-merge-diff/v6 v6.4.2 // indirect
 )
 
-replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20261008000049-d507ac261a94
+replace github.com/tailscale/wireguard-go => github.com/nuclearkev/wireguard-go v0.0.0-20261008134953-e33cc573091d
 
 replace github.com/tailscale/peercred => github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151
 

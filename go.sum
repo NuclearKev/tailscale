@@ -914,8 +914,8 @@ github.com/nishanths/predeclared v0.2.2 h1:V2EPdZPliZymNAn79T8RkNApBjMmVKh5XRpLm
 github.com/nishanths/predeclared v0.2.2/go.mod h1:RROzoN6TnGQupbC+lqggsOlcgysk3LMK/HI84Mp280c=
 github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151 h1:L9kV9mwNAeH/xhuacwmBiSq8nFNw3EXEGz3JFCquMyk=
 github.com/nuclearkev/peercred v0.0.0-20260422153448-b7b00efe5151/go.mod h1:f93CXfllFsO9ZQVq+Zocb1Gp4G5Fz0b0rXHLOzt/Djc=
-github.com/nuclearkev/wireguard-go v0.0.0-20261008000049-d507ac261a94 h1:zUTx1DMqF39ajMNt0FmFPSdqaEKRcSG3LnrkxpO8w7s=
-github.com/nuclearkev/wireguard-go v0.0.0-20261008000049-d507ac261a94/go.mod h1:rUelGmuK4UnSJYM5gl5Mknp6YbwwcL8+VAPMhNYe+jg=
+github.com/nuclearkev/wireguard-go v0.0.0-20261008134953-e33cc573091d h1:CrX7FLmKXAKW8Q+0d+L8vJlYL0gk2G0j57CirM9WMpo=
+github.com/nuclearkev/wireguard-go v0.0.0-20261008134953-e33cc573091d/go.mod h1:rUelGmuK4UnSJYM5gl5Mknp6YbwwcL8+VAPMhNYe+jg=
 github.com/nunnatsa/ginkgolinter v0.24.0 h1:Mp0EagluLFP98JatP6nqp/gGEoljNG97uf9AcxcBVy8=
 github.com/nunnatsa/ginkgolinter v0.24.0/go.mod h1:2ZMRuzX6+3XXyY6UZOwb6n+MCocVGbkIsDBC4vuWz5c=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
