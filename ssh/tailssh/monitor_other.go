@@ -1,7 +1,7 @@
 // Copyright (c) Tailscale Inc & contributors
 // SPDX-License-Identifier: BSD-3-Clause
 
-//go:build (darwin && !ios) || freebsd || openbsd
+//go:build (darwin && !ios) || freebsd || openbsd || netbsd
 
 package tailssh
 
